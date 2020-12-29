@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import "./Login.css";
 import { Form, Input, Button } from "antd";
 import Auth from "../../api/Auth";
@@ -27,6 +28,9 @@ export default function Login() {
     setLoading(false);
     console.log("Failed:", errorInfo);
   };
+  if (localStorage.getItem("token")) {
+    return <Redirect to="/home" />;
+  }
   return (
     <div className="login">
       <div className="login__content">

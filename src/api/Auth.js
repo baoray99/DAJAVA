@@ -9,12 +9,11 @@ const login = (email, password) => {
       })
       .then((res) => {
         resolve(res);
-        localStorage.setItem("token", JSON.stringify(res.data.accessToken));
+        localStorage.setItem("token", JSON.stringify(res.data.token));
       })
       .catch((error) => {
         reject(error);
       });
   });
 };
-
 export default { login };
