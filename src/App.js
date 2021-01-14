@@ -9,6 +9,7 @@ import {
 import Login from "../src/pages/login/Login";
 import ProtectedRoute from "../src/guard/ProtectedRoute";
 import Layouts from "../src/layouts/mainLayout/MainLayout";
+import Cart from "../src/pages/cart/Cart";
 
 export default function App() {
   return (
@@ -17,8 +18,8 @@ export default function App() {
         <Switch>
           <Redirect exact from="/" to="/login" />
           <Route exact path="/login" component={Login} />
-          <ProtectedRoute exact path="/*" component={Layouts} />
-          {/* muon lay het path co trong layout thi cho path cho /* la dc */}
+          <ProtectedRoute path="/drink/*" component={Layouts} />
+          <Route exact path="/cart" component={Cart}></Route>
         </Switch>
       </Router>
     </div>

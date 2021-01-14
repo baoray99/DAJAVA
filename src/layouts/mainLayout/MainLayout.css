@@ -6,11 +6,19 @@
 }
 .sticky {
   position: fixed;
-  top: 0;
+  top: 64px;
   right: 50px;
   width: 200px;
   height: auto !important;
 }
 .content {
   margin-right: 200px;
+}
+.header {
+  position: fixed;
+  z-index: 99;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

@@ -7,7 +7,8 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import { Layout, Menu, Carousel } from "antd";
+import { Layout, Menu, Carousel, Input } from "antd";
+import { CoffeeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import Milktea from "../../pages/milktea/Milktea";
 import FruitJuice from "../../pages/fruitjuice/FruitJuice";
 
@@ -16,6 +17,7 @@ export default function MainLayout() {
   const { Header, Content, Footer, Sider } = Layout;
   const location = useLocation();
   const path = location.pathname;
+  const { Search } = Input;
   const contentStyle = {
     height: 380,
     color: "#fff",
@@ -49,18 +51,18 @@ export default function MainLayout() {
       <Router>
         <Layout>
           <Header className="header">
-            <div className="logo" />
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              style={{ display: "flex", justifyContent: "center" }}
-            >
-              <Menu.Item key="1">Milktea</Menu.Item>
-              <Menu.Item key="2">Fruit Juice</Menu.Item>
-              <Menu.Item key="3">Cafe</Menu.Item>
-            </Menu>
+            <CoffeeOutlined style={{ fontSize: 26, color: "white" }} />
+            <Search
+              placeholder="input search text"
+              enterButton
+              allowClear
+              style={{ width: 400 }}
+            />
+            <Link to="/cart" target="_top">
+              <ShoppingCartOutlined style={{ fontSize: 26, color: "white" }} />
+            </Link>
           </Header>
-          <Content style={{ width: "100%" }}>
+          <Content style={{ width: "100%", marginTop: 64 }}>
             <Carousel autoplay>
               <div>
                 <h3 style={contentStyle}>1</h3>
@@ -86,10 +88,14 @@ export default function MainLayout() {
                   style={{ padding: "0 24px", minHeight: 280 }}
                   id="myContent"
                 >
-                  <Route exact path="/milktea" component={Milktea}></Route>
                   <Route
                     exact
-                    path="/fruitjuice"
+                    path="/drink/milktea"
+                    component={Milktea}
+                  ></Route>
+                  <Route
+                    exact
+                    path="/drink/fruitjuice"
                     component={FruitJuice}
                   ></Route>
                 </Content>
@@ -105,10 +111,10 @@ export default function MainLayout() {
                     onClick={changeKey}
                   >
                     <Menu.Item key="1">
-                      <Link to="/milktea">Milktea</Link>
+                      <Link to="/drink/milktea">Milktea</Link>
                     </Menu.Item>
                     <Menu.Item key="2">
-                      <Link to="/fruitjuice">Fruit Juice</Link>
+                      <Link to="/drink/fruitjuice">Fruit Juice</Link>
                     </Menu.Item>
                     <Menu.Item key="3">
                       <Link>Cafe</Link>

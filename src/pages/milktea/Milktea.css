@@ -1,0 +1,13 @@
+.name_drink {
+  font-size: 14px;
+  color: black;
+}
+.name_drink:hover {
+  text-decoration: underline;
+  color: black;
+}
+.site-drawer-render-in-current-wrapper {
+  background: #fafafa;
+  border: 1px solid #ebedf0;
+  border-radius: 2px;
+}
