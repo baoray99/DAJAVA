@@ -29,7 +29,7 @@ export default function Login() {
     console.log("Failed:", errorInfo);
   };
   if (localStorage.getItem("token")) {
-    return <Redirect to="/drink/" />;
+    return <Redirect to="/drink/milktea" />;
   }
   return (
     <div className="login">

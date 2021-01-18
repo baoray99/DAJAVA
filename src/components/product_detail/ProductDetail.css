@@ -1,0 +1,11 @@
+.product_name {
+  position: relative;
+}
+.product_name::before {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  width: 50%;
+  height: 4px;
+  background-color: black;
+}

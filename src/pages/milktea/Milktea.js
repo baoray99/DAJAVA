@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Spin } from "antd";
 import MilkteaAPI from "../../api/Milktea";
-import ProductDetail from "../../components/ProductDetail";
+import ProductDetail from "../../components/product_detail/ProductDetail";
 import { Link } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import "./Milktea.css";
@@ -11,8 +11,10 @@ export default function Milktea(props) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
-  const showDrawer = () => {
+  const [selectedItem, setSelectedItem] = useState(null);
+  const showDrawer = (milktea) => {
     setVisible(true);
+    setSelectedItem(milktea);
   };
   const onClose = () => {
     setVisible(false);
@@ -52,9 +54,7 @@ export default function Milktea(props) {
                   <div style={{ display: "flex" }}>
                     <Link
                       className="name_drink"
-                      // to="/milktea/detail"
-                      // target="_top"
-                      onClick={showDrawer}
+                      onClick={() => showDrawer(milktea)}
                     >
                       {milktea.name}
                     </Link>
@@ -66,7 +66,11 @@ export default function Milktea(props) {
               );
             })}
         </div>
-        <ProductDetail visible={visible} onClose={onClose} />
+        <ProductDetail
+          visible={visible}
+          onClose={onClose}
+          selectedItem={selectedItem}
+        />
       </Spin>
     </div>
   );

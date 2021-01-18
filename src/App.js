@@ -19,7 +19,7 @@ export default function App() {
           <Redirect exact from="/" to="/login" />
           <Route exact path="/login" component={Login} />
           <ProtectedRoute path="/drink/*" component={Layouts} />
-          <Route exact path="/cart" component={Cart}></Route>
+          <ProtectedRoute exact path="/cart" component={Cart}></ProtectedRoute>
         </Switch>
       </Router>
     </div>

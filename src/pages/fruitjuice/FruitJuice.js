@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, Spin } from "antd";
-import MilkteaAPI from "../../api/Milktea";
+import FruitJuiceAPI from "../../api/Fruitjuice";
 import { LoadingOutlined } from "@ant-design/icons";
 
 export default function Milktea() {
@@ -10,7 +10,7 @@ export default function Milktea() {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    MilkteaAPI.getAllMilktea()
+    FruitJuiceAPI.getAllFruitjuice()
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -30,14 +30,14 @@ export default function Milktea() {
           }}
         >
           {data &&
-            data.map((milktea) => {
+            data.map((fruitjuice) => {
               return (
                 <Card
                   style={{ width: 250, margin: 20 }}
-                  cover={<img alt="example" src={milktea.avatar} />}
+                  cover={<img alt="example" src={fruitjuice.avatar} />}
                 >
                   <Meta
-                    title={milktea.name}
+                    title={fruitjuice.name}
                     description="This is the description"
                   />
                 </Card>

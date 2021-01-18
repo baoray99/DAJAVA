@@ -7,7 +7,7 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import { Layout, Menu, Carousel, Input } from "antd";
+import { Layout, Menu, Carousel, Input, Badge } from "antd";
 import { CoffeeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import Milktea from "../../pages/milktea/Milktea";
 import FruitJuice from "../../pages/fruitjuice/FruitJuice";
@@ -18,6 +18,17 @@ export default function MainLayout() {
   const location = useLocation();
   const path = location.pathname;
   const { Search } = Input;
+  const [count, setCount] = useState(0);
+  const increase = () => {
+    setCount(count + 1);
+  };
+  const decline = () => {
+    if (count < 0) {
+      setCount(0);
+    } else {
+      setCount(count - 1);
+    }
+  };
   const contentStyle = {
     height: 380,
     color: "#fff",
@@ -26,7 +37,7 @@ export default function MainLayout() {
     background: "#364d79",
   };
   const [selectedKey, setSelectedKey] = useState(
-    path === "/milktea" ? 1 : path === "/fruitjuice" ? 2 : 99
+    path === "/drink/milktea" ? 1 : path === "/drink/fruitjuice" ? 2 : 99
   );
   const changeKey = (e) => {
     setSelectedKey(e.key);
@@ -58,9 +69,13 @@ export default function MainLayout() {
               allowClear
               style={{ width: 400 }}
             />
-            <Link to="/cart" target="_top">
-              <ShoppingCartOutlined style={{ fontSize: 26, color: "white" }} />
-            </Link>
+            <Badge count={count} showZero={true}>
+              <Link to="/cart" target="_top">
+                <ShoppingCartOutlined
+                  style={{ fontSize: 26, color: "white" }}
+                />
+              </Link>
+            </Badge>
           </Header>
           <Content style={{ width: "100%", marginTop: 64 }}>
             <Carousel autoplay>
@@ -102,12 +117,14 @@ export default function MainLayout() {
                 <Sider
                   className="site-layout-background"
                   id="mySider"
-                  style={{ height: "100%" }}
+                  style={{
+                    height: "100%",
+                  }}
                 >
                   <Menu
                     mode="inline"
                     style={{ height: "100%" }}
-                    defaultSelectedKeys={[selectedKey + ""]}
+                    selectedKeys={[selectedKey + ""]}
                     onClick={changeKey}
                   >
                     <Menu.Item key="1">
@@ -134,9 +151,7 @@ export default function MainLayout() {
               </Layout>
             </Switch>
           </Content>
-          <Footer style={{ textAlign: "center" }}>
-            Ant Design ©2018 Created by Ant UED
-          </Footer>
+          <Footer style={{ textAlign: "center" }}>Powered by BaoRay</Footer>
         </Layout>
       </Router>
     </div>
