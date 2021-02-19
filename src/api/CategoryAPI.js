@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const getAllFruitjuice = () => {
+const getCategory = (id) => {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://5ff3f0f516cf4f0017c1f865.mockapi.io/fruitjuice")
+      .get("https://beverage-app.herokuapp.com/category")
       .then((res) => {
         resolve(res);
       })
@@ -13,4 +13,4 @@ const getAllFruitjuice = () => {
   });
 };
 
-export default { getAllFruitjuice };
+export default { getCategory };

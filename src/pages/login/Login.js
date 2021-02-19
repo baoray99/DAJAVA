@@ -28,9 +28,9 @@ export default function Login() {
     setLoading(false);
     console.log("Failed:", errorInfo);
   };
-  if (localStorage.getItem("token")) {
-    return <Redirect to="/drink/milktea" />;
-  }
+  // if (localStorage.getItem("token")) {
+  //   return <Redirect to="/product/category=1" />;
+  // }
   return (
     <div className="login">
       <div className="login__content">

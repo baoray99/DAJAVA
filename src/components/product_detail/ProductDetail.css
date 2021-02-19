@@ -1,5 +1,6 @@
 .product_name {
   position: relative;
+  text-align: left;
 }
 .product_name::before {
   content: "";

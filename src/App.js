@@ -16,10 +16,10 @@ export default function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Redirect exact from="/" to="/login" />
-          <Route exact path="/login" component={Login} />
-          <ProtectedRoute path="/drink/*" component={Layouts} />
-          <ProtectedRoute exact path="/cart" component={Cart}></ProtectedRoute>
+          <Redirect exact from="/" to="/product/category=1" />
+          {/* <Route exact path="/login" component={Login} /> */}
+          <Route path="/product/*" component={Layouts} />
+          <Route exact path="/cart" component={Cart}></Route>
         </Switch>
       </Router>
     </div>

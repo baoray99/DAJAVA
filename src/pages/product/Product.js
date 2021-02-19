@@ -1,27 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { Card, Spin } from "antd";
-import MilkteaAPI from "../../api/Milktea";
+import ProductAPI from "../../api/ProductByCategoryAPI";
 import ProductDetail from "../../components/product_detail/ProductDetail";
 import { Link } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
-import "./Milktea.css";
+import "./Product.css";
 
 export default function Milktea(props) {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const id = props.match.params.id;
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const showDrawer = (milktea) => {
+  const [orders] = useState([]);
+  const recieveData = (childData) => {
+    orders.push(childData);
+    senDataToMainLayout(orders);
+  };
+  // callback
+  const senDataToMainLayout = (orders) => {
+    props.parentCallback(orders);
+  };
+  const showDrawer = (product) => {
     setVisible(true);
-    setSelectedItem(milktea);
+    setSelectedItem(product);
   };
   const onClose = () => {
     setVisible(false);
   };
   useEffect(() => {
     setLoading(true);
-    MilkteaAPI.getAllMilktea()
+    ProductAPI.getProductByCategory(id)
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -29,7 +39,7 @@ export default function Milktea(props) {
       .catch((error) => {
         setLoading(false);
       });
-  }, []);
+  }, [id]);
   return (
     <div>
       <Spin indicator={antIcon} spinning={loading}>
@@ -42,25 +52,27 @@ export default function Milktea(props) {
           className="site-drawer-render-in-current-wrapper"
         >
           {data &&
-            data.map((milktea) => {
+            data.map((product) => {
               return (
                 <Card
                   style={{
                     width: 250,
                     margin: 20,
+                    textAlign: "left",
                   }}
-                  cover={<img alt="example" src={milktea.avatar} />}
+                  cover={<img alt="example" src={product.image} />}
                 >
                   <div style={{ display: "flex" }}>
                     <Link
                       className="name_drink"
-                      onClick={() => showDrawer(milktea)}
+                      onClick={() => showDrawer(product)}
+                      style={{ fontWeight: 700 }}
                     >
-                      {milktea.name}
+                      {product.name}
                     </Link>
                   </div>
                   <div style={{ display: "flex" }}>
-                    <p>cailontao</p>
+                    <p>{product.price} $</p>
                   </div>
                 </Card>
               );
@@ -70,6 +82,7 @@ export default function Milktea(props) {
           visible={visible}
           onClose={onClose}
           selectedItem={selectedItem}
+          parentCallback={recieveData}
         />
       </Spin>
     </div>

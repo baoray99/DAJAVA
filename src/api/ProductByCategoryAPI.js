@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const getAllMilktea = () => {
+const getProductByCategory = (id) => {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://5ff3f0f516cf4f0017c1f865.mockapi.io/milktea")
+      .get(`https://beverage-app.herokuapp.com/product/category=${id}`)
       .then((res) => {
         resolve(res);
       })
@@ -13,4 +13,4 @@ const getAllMilktea = () => {
   });
 };
 
-export default { getAllMilktea };
+export default { getProductByCategory };

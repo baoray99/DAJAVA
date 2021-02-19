@@ -1,0 +1,368 @@
+{
+	"info": {
+		"_postman_id": "79ffe130-6692-4596-a816-5753634dad45",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET product list by category id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/product/category=1",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"product",
+						"category=1"
+					]
+				},
+				"description": "category=1 : hot drinks; category=2 : cold drinks; category=3 : foods"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Order list by user id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/order/user=1",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"order",
+						"user=1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET OrderDetail list by order id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/detail/order=1",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"detail",
+						"order=1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Order - read description",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"recipientName\": \"Nguyen Van POST\",\r\n    \"orderAddress\": \"Da Nang\",\r\n    \"phone\": \"1234567890\",\r\n    \"user\": {\r\n        \"id\": 1\r\n    },\r\n    \"details\": [\r\n        {\r\n            \"quantity\": 7,\r\n            \"note\": \"test POST request 1\",\r\n            \"size\": {\r\n                \"id\": 2\r\n            },\r\n            \"product\": {\r\n                \"id\": 2\r\n            },\r\n            \"toppings\": [\r\n                {\r\n                    \"id\": 2\r\n                },\r\n                {\r\n                    \"id\": 3\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"quantity\": 7,\r\n            \"note\": \"test POST request 2\",\r\n            \"size\": {\r\n                \"id\": 2\r\n            },\r\n            \"product\": {\r\n                \"id\": 2\r\n            },\r\n            \"toppings\": [\r\n                {\r\n                    \"id\": 2\r\n                },\r\n                {\r\n                    \"id\": 3\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/order",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"order"
+					]
+				},
+				"description": "POST theo format trong phần body là ok...\r\nOrderDetail phải POST riêng ra link khác sau khi order_id được insert, order_id có tồn tại trong csdl rồi mới insert OrderDetail theo cái order_id đó được (xem POST OrderDetail)"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Order - read description",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"recipientName\": \"Nguyen Van PUT\",\r\n    \"orderAddress\": \"Da Nang\",\r\n    \"phone\": \"1234567890\",\r\n    \"user\": {\r\n        \"id\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/order/1",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"order",
+						"1"
+					]
+				},
+				"description": "update order by ID=1; id phải tồn tại trong csdl và id trong Body phải trùng với id trong link /id, nếu không sẽ bị 404"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT OrderDetail",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"quantity\": 9,\r\n    \"note\": \"test PUT request\",\r\n    \"order\": {\"id\": 1},\r\n    \"size\": {\"id\": 2},\r\n    \"product\": {\"id\": 2},\r\n    \"toppings\": [\r\n        {\r\n            \"id\": 2\r\n        },\r\n        {\r\n            \"id\": 3\r\n        }\r\n        \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/detail/1",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"detail",
+						"1"
+					]
+				},
+				"description": "update order detail by ID=1"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Order - read description",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/order/1",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"order",
+						"1"
+					]
+				},
+				"description": "delete order by ID=1; id phải tồn tại trong csdl, nếu không sẽ bị 404; nếu 204 là ok; tất cả order detail có order_id này là khóa ngoại sẽ delete theo"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE OrderDetail",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/detail/1",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"detail",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET category list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/category",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET size list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/size",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"size"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET topping list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/topping",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"topping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET user list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/user/",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET role list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/role",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullname\": \"Nguyen Thi POST\",\r\n    \"username\": \"test123\",\r\n    \"password\": \"12345\",\r\n    \"photo\": \"https://i.pinimg.com/564x/bf/1e/9b/bf1e9b707d1d3aeb5d05592d2416d0c2.jpg\",\r\n    \"birthday\": \"2020-12-24T00:00:00.000+00:00\",\r\n    \"phone\": 1234567890,\r\n    \"address\": \"Da Nang\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/user",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT User",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"fullname\": \"Nguyen Thi PUT\",\r\n    \"username\": \"test123\",\r\n    \"password\": \"12345\",\r\n    \"photo\": \"https://i.pinimg.com/564x/bf/1e/9b/bf1e9b707d1d3aeb5d05592d2416d0c2.jpg\",\r\n    \"birthday\": \"2020-12-24T00:00:00.000+00:00\",\r\n    \"phone\": 1234567890,\r\n    \"address\": \"Da Nang\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://beverage-app.herokuapp.com/user/1",
+					"protocol": "https",
+					"host": [
+						"beverage-app",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"user",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

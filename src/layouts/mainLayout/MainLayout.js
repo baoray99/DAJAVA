@@ -7,27 +7,129 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import { Layout, Menu, Carousel, Input, Badge } from "antd";
-import { CoffeeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import Milktea from "../../pages/milktea/Milktea";
-import FruitJuice from "../../pages/fruitjuice/FruitJuice";
+import {
+  Layout,
+  Menu,
+  Carousel,
+  Input,
+  Badge,
+  Dropdown,
+  message,
+  Modal,
+  Button,
+  Form,
+} from "antd";
+import {
+  CoffeeOutlined,
+  ShoppingCartOutlined,
+  OrderedListOutlined,
+} from "@ant-design/icons";
+import Product from "../../pages/product/Product";
+import CategoryAPI from "../../api/CategoryAPI";
+import OrderAPI from "../../api/OrderAPI";
+import Auth from "../../api/Auth";
 
 export default function MainLayout() {
-  const { SubMenu } = Menu;
   const { Header, Content, Footer, Sider } = Layout;
-  const location = useLocation();
-  const path = location.pathname;
   const { Search } = Input;
+  let location = useLocation();
+  let path = location.pathname;
+  const [categories, setCategories] = useState(null);
+  const [details, setDetails] = useState([]);
   const [count, setCount] = useState(0);
-  const increase = () => {
-    setCount(count + 1);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalLogin, setModalLogin] = useState(false);
+  const [user, setUser] = useState(null);
+  const recieveData = (orders) => {
+    setDetails(orders);
+    setCount(orders.length);
   };
-  const decline = () => {
-    if (count < 0) {
-      setCount(0);
+  const deleteItem = (index) => {
+    details.splice(index, 1);
+    setCount(details.length);
+  };
+  const delivery = () => {
+    if (localStorage.getItem("token")) {
+      showModal();
     } else {
-      setCount(count - 1);
+      error();
     }
+    localStorage.setItem("details", JSON.stringify(details));
+  };
+  const logout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+  const listlogOut = (
+    <Menu>
+      <Menu.Item>
+        <Link to="/cart" target="_top">
+          <OrderedListOutlined style={{ fontSize: 24 }} /> Your Delivery
+        </Link>
+      </Menu.Item>
+      <Menu.Item danger onClick={logout}>
+        Log out
+      </Menu.Item>
+    </Menu>
+  );
+  const listOrder = (
+    <Menu>
+      {count > 0 ? (
+        details.map((detail, index) => {
+          return (
+            <Menu.Item
+              style={{
+                display: "flex",
+
+                width: 460,
+              }}
+            >
+              <img
+                src={detail.detail.detail.image}
+                height="100px"
+                width="100px"
+              />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginLeft: 24,
+                  overflow: "hidden",
+                }}
+              >
+                <p>{detail.detail.detail.name}</p>
+                <p>Amount: {detail.order.quantity}</p>
+                <p>Total: {detail.detail.totalCost}$</p>
+              </div>
+
+              <Button
+                style={{ marginLeft: "auto" }}
+                onClick={() => deleteItem(index)}
+              >
+                Delete item{" "}
+              </Button>
+            </Menu.Item>
+          );
+        })
+      ) : (
+        <Menu.Item>No Item </Menu.Item>
+      )}
+      {count > 0 ? (
+        <Menu.Item>
+          <Button type="primary" onClick={delivery}>
+            Delivery now
+          </Button>
+        </Menu.Item>
+      ) : (
+        ""
+      )}
+    </Menu>
+  );
+  const error = () => {
+    message.error("You must login to delivery!");
+  };
+  const success = () => {
+    message.success("Your order is being delivered!");
   };
   const contentStyle = {
     height: 380,
@@ -36,9 +138,99 @@ export default function MainLayout() {
     textAlign: "center",
     background: "#364d79",
   };
+  const [loading, setLoading] = useState(false);
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+  };
+  const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
+  };
+  const onFinish = (values) => {
+    setLoading(true);
+    Auth.login(values.email, values.password)
+      .then((res) => {
+        localStorage.setItem("username", JSON.stringify(res.data.username));
+        localStorage.setItem("id", JSON.stringify(res.data.id));
+        setLoading(false);
+        setModalLogin(false);
+        window.location.reload();
+      })
+      .catch((error) => {
+        onFinishFailed();
+      });
+  };
+  const onFinishDelivery = (values) => {
+    setLoading(true);
+    const tempDetails = [];
+    details.map((detail) => {
+      tempDetails.push(detail.order);
+    });
+    const datas = {
+      recipientName: values.recipientName,
+      orderAddress: values.orderAddress,
+      phone: values.phone,
+      user: {
+        id: user.id,
+      },
+      details: tempDetails,
+    };
+    OrderAPI.postOrder(datas, JSON.parse(localStorage.getItem("token")))
+      .then((res) => {
+        setLoading(false);
+        setIsModalVisible(false);
+        success();
+        setCount(0);
+      })
+      .catch((error1) => {
+        error();
+        onFinishFailed();
+      });
+  };
+  const onFinishFailed = (errorInfo) => {
+    setLoading(false);
+    console.log("Failed:", errorInfo);
+  };
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+  const showModalLogin = () => {
+    setModalLogin(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+    setModalLogin(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setModalLogin(false);
+  };
   const [selectedKey, setSelectedKey] = useState(
-    path === "/drink/milktea" ? 1 : path === "/drink/fruitjuice" ? 2 : 99
+    path === "/product/category=1"
+      ? 1
+      : path === "/product/category=2"
+      ? 2
+      : path === "/product/category=3"
+      ? 3
+      : path === "/product/category=4"
+      ? 4
+      : path === "/product/category=5"
+      ? 5
+      : path === "/product/category=6"
+      ? 6
+      : path === "/product/category=7"
+      ? 7
+      : path === "/product/category=8"
+      ? 8
+      : path === "/product/category=9"
+      ? 9
+      : path === "/product/category=10"
+      ? 10
+      : 99
   );
+
   const changeKey = (e) => {
     setSelectedKey(e.key);
   };
@@ -56,7 +248,20 @@ export default function MainLayout() {
   };
   useEffect(() => {
     window.addEventListener("scroll", scrollCallBack);
-  }, []);
+    CategoryAPI.getCategory()
+      .then((res) => {
+        setCategories(res.data);
+      })
+      .catch((error) => {});
+    Auth.getUserByUsername(
+      JSON.parse(localStorage.getItem("token")),
+      JSON.parse(localStorage.getItem("username"))
+    )
+      .then((res) => {})
+      .catch((err) => {
+        setUser(err.response.data);
+      });
+  }, [user]);
   return (
     <div>
       <Router>
@@ -69,15 +274,32 @@ export default function MainLayout() {
               allowClear
               style={{ width: 400 }}
             />
-            <Badge count={count} showZero={true}>
-              <Link to="/cart" target="_top">
-                <ShoppingCartOutlined
-                  style={{ fontSize: 26, color: "white" }}
-                />
-              </Link>
-            </Badge>
+            <div
+              style={{
+                width: localStorage.getItem("username") ? "15%" : "10%",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Dropdown overlay={listOrder} trigger={["click"]}>
+                <Badge count={count} showZero={true}>
+                  <ShoppingCartOutlined
+                    style={{ fontSize: 26, color: "white" }}
+                  />
+                </Badge>
+              </Dropdown>
+
+              {localStorage.getItem("username") !== null ? (
+                <Dropdown overlay={listlogOut} trigger={["hover"]}>
+                  <p style={{ color: "white" }}>Hi {user && user.fullname}</p>
+                </Dropdown>
+              ) : (
+                <Button onClick={showModalLogin}>Login</Button>
+              )}
+            </div>
           </Header>
-          <Content style={{ width: "100%", marginTop: 64 }}>
+          <Content style={{ width: "100%" }}>
             <Carousel autoplay>
               <div>
                 <h3 style={contentStyle}>1</h3>
@@ -105,14 +327,14 @@ export default function MainLayout() {
                 >
                   <Route
                     exact
-                    path="/drink/milktea"
-                    component={Milktea}
-                  ></Route>
-                  <Route
-                    exact
-                    path="/drink/fruitjuice"
-                    component={FruitJuice}
-                  ></Route>
+                    path="/product/category=:id"
+                    // component={Product}
+                    render={(props) => (
+                      <Product {...props} parentCallback={recieveData} />
+                    )}
+                  >
+                    {/* <Product parentCallback={recieveData} /> */}
+                  </Route>
                 </Content>
                 <Sider
                   className="site-layout-background"
@@ -125,27 +347,19 @@ export default function MainLayout() {
                     mode="inline"
                     style={{ height: "100%" }}
                     selectedKeys={[selectedKey + ""]}
-                    onClick={changeKey}
+                    // onClick={changeKey}
+                    // onChange={changeKey}
                   >
-                    <Menu.Item key="1">
-                      <Link to="/drink/milktea">Milktea</Link>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                      <Link to="/drink/fruitjuice">Fruit Juice</Link>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                      <Link>Cafe</Link>
-                    </Menu.Item>
-                    <SubMenu key="sub1" title="Size">
-                      <Menu.Item key="4">S</Menu.Item>
-                      <Menu.Item key="5">M</Menu.Item>
-                      <Menu.Item key="6">L</Menu.Item>
-                    </SubMenu>
-                    <SubMenu key="sub2" title="Topping">
-                      <Menu.Item key="7">Trân châu đen </Menu.Item>
-                      <Menu.Item key="8">Thạch</Menu.Item>
-                      <Menu.Item key="9">Trân châu trắng</Menu.Item>
-                    </SubMenu>
+                    {categories &&
+                      categories.map((category, index) => {
+                        return (
+                          <Menu.Item key={index + 1} onClick={changeKey}>
+                            <Link to={`/product/category=${index + 1}`}>
+                              {category.name}
+                            </Link>
+                          </Menu.Item>
+                        );
+                      })}
                   </Menu>
                 </Sider>
               </Layout>
@@ -153,6 +367,104 @@ export default function MainLayout() {
           </Content>
           <Footer style={{ textAlign: "center" }}>Powered by BaoRay</Footer>
         </Layout>
+        <Modal
+          title="Basic Modal"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={false}
+        >
+          <Form
+            {...layout}
+            name="basic"
+            onFinish={onFinishDelivery}
+            onFinishFailed={onFinishFailed}
+          >
+            <Form.Item
+              label="Recipient Name"
+              name="recipientName"
+              rules={[
+                { required: true, message: "Please input recipient name!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Address"
+              name="orderAddress"
+              rules={[
+                { required: true, message: "Please input your address!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Phone Number"
+              name="phone"
+              rules={[
+                { required: true, message: "Please input your Phone Number!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item {...tailLayout}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                disabled={loading}
+              >
+                {loading ? "Delivering..." : "Delivery now"}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+        <Modal
+          title="Basic Modal"
+          visible={modalLogin}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={false}
+          style={{ display: "flex" }}
+        >
+          <Form
+            {...layout}
+            name="basic"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+          >
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: "Please input your email!" }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item {...tailLayout}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                disabled={loading}
+              >
+                {loading ? "Logging in ..." : "Log in"}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </Router>
     </div>
   );
