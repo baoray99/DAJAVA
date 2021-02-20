@@ -135,6 +135,9 @@ export default function MainLayout() {
   const success = () => {
     message.success("Your order is being delivered!");
   };
+  const successRegister = () => {
+    message.success("Successfully!");
+  };
   const contentStyle = {
     height: 380,
     color: "#fff",
@@ -171,7 +174,7 @@ export default function MainLayout() {
       .then((res) => {
         setLoading(false);
         setModalRegister(false);
-        success();
+        successRegister();
       })
       .catch((error) => {
         errorLogin();
@@ -395,7 +398,7 @@ export default function MainLayout() {
           <Footer style={{ textAlign: "center" }}>Powered by BaoRay</Footer>
         </Layout>
         <Modal
-          title="Basic Modal"
+          title="Recipient details"
           visible={isModalVisible}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -449,7 +452,7 @@ export default function MainLayout() {
           </Form>
         </Modal>
         <Modal
-          title="Basic Modal"
+          title="Login"
           visible={modalLogin}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -500,7 +503,7 @@ export default function MainLayout() {
           </Form>
         </Modal>
         <Modal
-          title="Basic Modal"
+          title="Register"
           visible={modalRegister}
           onOk={handleOk}
           onCancel={handleCancelRegister}

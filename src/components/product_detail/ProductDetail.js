@@ -91,7 +91,7 @@ export default function ProductDetail(props) {
     <div>
       {selectedItem && (
         <Drawer
-          title="Basic Drawer"
+          title="Product details"
           placement="right"
           closable={false}
           onClose={onClose}
@@ -136,7 +136,7 @@ export default function ProductDetail(props) {
           <hr />
           <div>{selectedItem && selectedItem.description}</div>
           <Modal
-            title="Basic Modal"
+            title="Order detail"
             visible={isModalVisible}
             okText="Add to cart"
             onOk={handleOk}
