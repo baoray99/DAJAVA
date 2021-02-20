@@ -37,7 +37,9 @@ export default function Cart() {
     <div>
       <Layout>
         <Header className="header">
-          <CoffeeOutlined style={{ fontSize: 26, color: "white" }} />
+          <a href="/product/category=1">
+            <CoffeeOutlined style={{ fontSize: 26, color: "white" }} />
+          </a>
           {/* <Search
             placeholder="input search text"
             enterButton

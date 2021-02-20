@@ -39,6 +39,7 @@ export default function MainLayout() {
   const [count, setCount] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalLogin, setModalLogin] = useState(false);
+  const [modalRegister, setModalRegister] = useState(false);
   const [user, setUser] = useState(null);
   const recieveData = (orders) => {
     setDetails(orders);
@@ -128,6 +129,9 @@ export default function MainLayout() {
   const error = () => {
     message.error("You must login to delivery!");
   };
+  const errorLogin = () => {
+    message.error("Username or password invalid!");
+  };
   const success = () => {
     message.success("Your order is being delivered!");
   };
@@ -157,6 +161,20 @@ export default function MainLayout() {
         window.location.reload();
       })
       .catch((error) => {
+        errorLogin();
+        onFinishFailed();
+      });
+  };
+  const onFinishRegister = (values) => {
+    setLoading(true);
+    Auth.register(values)
+      .then((res) => {
+        setLoading(false);
+        setModalRegister(false);
+        success();
+      })
+      .catch((error) => {
+        errorLogin();
         onFinishFailed();
       });
   };
@@ -197,15 +215,22 @@ export default function MainLayout() {
   const showModalLogin = () => {
     setModalLogin(true);
   };
+  const showModalRegister = () => {
+    setModalRegister(true);
+  };
 
   const handleOk = () => {
     setIsModalVisible(false);
     setModalLogin(false);
+    setModalRegister(false);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
     setModalLogin(false);
+  };
+  const handleCancelRegister = () => {
+    setModalRegister(false);
   };
   const [selectedKey, setSelectedKey] = useState(
     path === "/product/category=1"
@@ -267,7 +292,9 @@ export default function MainLayout() {
       <Router>
         <Layout>
           <Header className="header">
-            <CoffeeOutlined style={{ fontSize: 26, color: "white" }} />
+            <a href="/product/category=1">
+              <CoffeeOutlined style={{ fontSize: 26, color: "white" }} />
+            </a>
             <Search
               placeholder="input search text"
               enterButton
@@ -461,6 +488,83 @@ export default function MainLayout() {
                 disabled={loading}
               >
                 {loading ? "Logging in ..." : "Log in"}
+              </Button>
+              <Button
+                type="primary"
+                style={{ marginLeft: 16 }}
+                onClick={showModalRegister}
+              >
+                Register
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+        <Modal
+          title="Basic Modal"
+          visible={modalRegister}
+          onOk={handleOk}
+          onCancel={handleCancelRegister}
+          footer={false}
+          style={{ display: "flex" }}
+        >
+          <Form
+            {...layout}
+            name="basic"
+            onFinish={onFinishRegister}
+            onFinishFailed={onFinishFailed}
+          >
+            <Form.Item
+              label="Fullname"
+              name="fullname"
+              rules={[
+                { required: true, message: "Please input your fullname!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Username"
+              name="username"
+              rules={[
+                { required: true, message: "Please input your username!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item
+              label="Phone"
+              name="phone"
+              rules={[{ required: true, message: "Please input your phone!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Address"
+              name="address"
+              rules={[
+                { required: true, message: "Please input your address!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item {...tailLayout}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                disabled={loading}
+              >
+                {loading ? "Registering ..." : "Register"}
               </Button>
             </Form.Item>
           </Form>

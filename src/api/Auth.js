@@ -35,4 +35,23 @@ const getUserByUsername = (token, username) => {
       });
   });
 };
-export default { login, getUserByUsername };
+
+const register = (data) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post("https://beverage-app.herokuapp.com/user/register", {
+        fullname: data.fullname,
+        username: data.username,
+        password: data.password,
+        phone: data.phone,
+        address: data.address,
+      })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+export default { login, getUserByUsername, register };
