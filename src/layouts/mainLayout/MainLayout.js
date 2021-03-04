@@ -132,6 +132,9 @@ export default function MainLayout() {
   const errorLogin = () => {
     message.error("Username or password invalid!");
   };
+  const errorRegis = () => {
+    message.error("Cannot register!");
+  };
   const success = () => {
     message.success("Your order is being delivered!");
   };
@@ -177,7 +180,7 @@ export default function MainLayout() {
         successRegister();
       })
       .catch((error) => {
-        errorLogin();
+        errorRegis();
         onFinishFailed();
       });
   };

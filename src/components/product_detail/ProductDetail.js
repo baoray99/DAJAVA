@@ -42,11 +42,13 @@ export default function ProductDetail(props) {
     });
   const changeList = (list) => {
     const listObject = [];
-    list.map((li) => {
-      const li1 = {};
-      li1["id"] = li;
-      listObject.push(li1);
-    });
+    if (totalCost > 0) {
+      list.map((li) => {
+        const li1 = {};
+        li1["id"] = li;
+        listObject.push(li1);
+      });
+    }
     setCheckedList(listObject);
   };
 
