@@ -469,7 +469,7 @@ export default function MainLayout() {
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label="Email"
+              label="Username"
               name="email"
               rules={[{ required: true, message: "Please input your email!" }]}
             >
