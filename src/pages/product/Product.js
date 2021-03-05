@@ -10,7 +10,6 @@ export default function Milktea(props) {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const id = props.match.params.id;
   const [data, setData] = useState(null);
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -22,15 +21,16 @@ export default function Milktea(props) {
   };
   // callback
   const onSearch = (value) => {
-    setSearch(value);
-    const resultSearch = data.filter((x) =>
-      x.name.toLowerCase().includes(search.toLowerCase())
-    );
     if (value === "") {
       ProductAPI.getProductByCategory(id).then((res) => {
         setData(res.data);
       });
-    } else setData(resultSearch);
+    } else {
+      const resultSearch = data.filter((x) =>
+        x.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setData(resultSearch);
+    }
   }; // search realtime name
   const senDataToMainLayout = (orders) => {
     props.parentCallback(orders);
