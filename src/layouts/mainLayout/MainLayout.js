@@ -31,7 +31,7 @@ import Auth from "../../api/Auth";
 
 export default function MainLayout() {
   const { Header, Content, Footer, Sider } = Layout;
-  const { Search } = Input;
+
   let location = useLocation();
   let path = location.pathname;
   const [categories, setCategories] = useState(null);
@@ -301,12 +301,7 @@ export default function MainLayout() {
             <a href="/product/category=1">
               <CoffeeOutlined style={{ fontSize: 26, color: "white" }} />
             </a>
-            <Search
-              placeholder="input search text"
-              enterButton
-              allowClear
-              style={{ width: 400 }}
-            />
+
             <div
               style={{
                 width: localStorage.getItem("username") ? "15%" : "10%",

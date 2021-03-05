@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Spin } from "antd";
+import { Card, Spin, Input } from "antd";
 import ProductAPI from "../../api/ProductByCategoryAPI";
 import ProductDetail from "../../components/product_detail/ProductDetail";
 import { Link } from "react-router-dom";
@@ -10,15 +10,28 @@ export default function Milktea(props) {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const id = props.match.params.id;
   const [data, setData] = useState(null);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [orders] = useState([]);
+  const { Search } = Input;
   const recieveData = (childData) => {
     orders.push(childData);
     senDataToMainLayout(orders);
   };
   // callback
+  const onSearch = (value) => {
+    setSearch(value);
+    const resultSearch = data.filter((x) =>
+      x.name.toLowerCase().includes(search.toLowerCase())
+    );
+    if (value === "") {
+      ProductAPI.getProductByCategory(id).then((res) => {
+        setData(res.data);
+      });
+    } else setData(resultSearch);
+  }; // search realtime name
   const senDataToMainLayout = (orders) => {
     props.parentCallback(orders);
   };
@@ -44,6 +57,13 @@ export default function Milktea(props) {
     <div>
       <Spin indicator={antIcon} spinning={loading}>
         {" "}
+        <Search
+          placeholder="find product"
+          enterButton
+          allowClear
+          style={{ width: 400, margin: "0 0 15px 0" }}
+          onChange={(e) => onSearch(e.target.value)}
+        />
         <div
           style={{
             display: "flex",
