@@ -471,7 +471,9 @@ export default function MainLayout() {
             <Form.Item
               label="Username"
               name="email"
-              rules={[{ required: true, message: "Please input your email!" }]}
+              rules={[
+                { required: true, message: "Please input your username!" },
+              ]}
             >
               <Input />
             </Form.Item>
